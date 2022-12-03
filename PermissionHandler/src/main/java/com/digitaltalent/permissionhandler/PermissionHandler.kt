@@ -51,16 +51,21 @@ class PermissionHandler(private val activity: ComponentActivity):PermissionInter
 
 
     private val requestSinglePermissionNoCallbackLauncher = activity.registerForActivityResult(ActivityResultContracts.RequestPermission()){ isGranted->
+        val info = activity.packageManager.getPermissionInfo(permission!!, GET_META_DATA)
+        val label = activity.getString(info.labelRes)
         when{
             isGranted->{
                 singlePermissionExecute?.let { it() }
             }
             !activity.shouldShowRequestPermissionRationale(permission!!) -> {
-                val info = activity.packageManager.getPermissionInfo(permission!!, GET_META_DATA)
-                val label = activity.getString(info.labelRes)
                 val fullDescription = "This lets you $label. \n" +
                         "To enable this, click App Settings below and activate this permissions"
                 showDialogAllowInSettings(fullDescription)
+            }
+            else -> {
+                val fullDescription = "This lets you $label. \n" +
+                        "Please allow this permission to use this feature."
+                showDialogSinglePermissionDenied(fullDescription)
             }
         }
 
@@ -68,42 +73,54 @@ class PermissionHandler(private val activity: ComponentActivity):PermissionInter
 
 
     private val requestMultiplePermissionWithCallbackLauncher = activity.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ maps->
+        val permissionDenied  = maps.filter { !it.value }.map {
+            val info = activity.packageManager.getPermissionInfo(it.key, GET_META_DATA)
+            val label = activity.getString(info.labelRes)
+            val description = activity.getString(info.descriptionRes)
+            PermissionInfo(it.key,label, description)
+        }
+        val labels = permissionDenied.joinToString(separator = ", ", truncated = "") { it.label }
         when{
             hasSelfPermission(activity,maps.map { it.key }.toTypedArray()) -> {
                 multiplePermissionExecute?.let { it() }
             }
             permissions.map { activity.shouldShowRequestPermissionRationale(it) }.contains(false) -> {
-                val permissionDenied  = maps.filter { !it.value }.map {
-                    val info = activity.packageManager.getPermissionInfo(it.key, GET_META_DATA)
-                    val label = activity.getString(info.labelRes)
-                    val description = activity.getString(info.descriptionRes)
-                    PermissionInfo(it.key,label, description)
-                }
-                val labels = permissionDenied.joinToString(separator = ", ", truncated = "") { it.label }
                 val fullDescription = "This lets you $labels. \n" +
                         "To enable this, click App Settings below and activate these permissions."
                 val data = MultiplePermissionData(permissionDenied,fullDescription)
                 multiplePermissionCallback?.onRequestPermissionInSettings(data)
             }
+            else -> {
+                val fullDescription = "This lets you $labels. \n" +
+                        "Please allow these permission to use this feature."
+                val data = MultiplePermissionData(permissionDenied,fullDescription)
+                multiplePermissionCallback?.onPermissionsDenied(data)
+            }
         }
     }
 
     private val requestMultiplePermissionNoCallbackLauncher = activity.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ maps->
+        val permissionDenied  = maps.filter { !it.value }.map {
+            val info = activity.packageManager.getPermissionInfo(it.key, GET_META_DATA)
+            val label = activity.getString(info.labelRes)
+            val description = activity.getString(info.descriptionRes)
+            PermissionInfo(it.key,label, description)
+        }
+        val labels = permissionDenied.joinToString(separator = ", ") { it.label }
         when{
             hasSelfPermission(activity,maps.map { it.key }.toTypedArray()) -> {
                 multiplePermissionExecute?.let { it() }
             }
             permissions.map { activity.shouldShowRequestPermissionRationale(it) }.contains(false) -> {
-                val permissionDenied  = maps.filter { !it.value }.map {
-                    val info = activity.packageManager.getPermissionInfo(it.key, GET_META_DATA)
-                    val label = activity.getString(info.labelRes)
-                    val description = activity.getString(info.descriptionRes)
-                    PermissionInfo(it.key,label, description)
-                }
-                val labels = permissionDenied.joinToString(separator = ", ") { it.label }
+
                 val fullDescription = "This lets you $labels. \n" +
                         "To enable this, click App Settings below and activate these permissions."
                 showDialogAllowInSettings(fullDescription)
+            }
+            else -> {
+                val fullDescription = "This lets you $labels. \n" +
+                        "Please allow these permission to use this feature."
+                showDialogMultiplePermissionDenied(fullDescription)
             }
         }
     }
@@ -180,6 +197,32 @@ class PermissionHandler(private val activity: ComponentActivity):PermissionInter
             }
         }
         return true
+    }
+
+    private fun showDialogSinglePermissionDenied(fullDescription: String){
+        AlertDialog.Builder(activity)
+            .setMessage(fullDescription)
+            .setPositiveButton("Allow"){dialog,_->
+                dialog.dismiss()
+                requestSinglePermissionNoCallbackLauncher.launch(permission)
+            }
+            .setNegativeButton("Don't Allow"){dialog,_->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun showDialogMultiplePermissionDenied(fullDescription: String){
+        AlertDialog.Builder(activity)
+            .setMessage(fullDescription)
+            .setPositiveButton("Allow"){dialog,_->
+                dialog.dismiss()
+                requestMultiplePermissionNoCallbackLauncher.launch(permissions.toTypedArray())
+            }
+            .setNegativeButton("Don't Allow"){dialog,_->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     private fun showDialogAllowInSettings(fullDescription: String) {

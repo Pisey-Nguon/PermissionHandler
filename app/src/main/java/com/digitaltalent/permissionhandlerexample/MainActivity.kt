@@ -2,6 +2,7 @@ package com.digitaltalent.permissionhandlerexample
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.digitaltalent.permissionhandler.PermissionHandler
@@ -33,14 +34,13 @@ class MainActivity : AppCompatActivity() {
             android.Manifest.permission.ACCESS_FINE_LOCATION,
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
         ){
-            fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-            }.addOnFailureListener {  }
+            Log.d(TAG, "runMultiplePermission: Permissions allowed")
         }
     }
 
     private fun runSinglePermission(){
         permissionHandler.runSinglePermission(android.Manifest.permission.CAMERA){
-
+            Log.d(TAG, "runMultiplePermission: Permission allowed")
         }
     }
 }
