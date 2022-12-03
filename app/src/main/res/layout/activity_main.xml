@@ -12,11 +12,11 @@
         android:id="@+id/btnRequestMultiplePermission"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Request Multiple Permission" />
+        android:text="Request Location Permission" />
     <Button
         android:id="@+id/btnRequestSinglePermission"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Request Single Permission" />
+        android:text="Request Camera Permission" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
