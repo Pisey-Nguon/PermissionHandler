@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.digitaltalent.permissionhandler.PermissionHandler
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -35,12 +36,14 @@ class MainActivity : AppCompatActivity() {
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
         ){
             Log.d(TAG, "runMultiplePermission: Permissions allowed")
+            Toast.makeText(this, "Location Permission allowed", Toast.LENGTH_LONG).show()
         }
     }
 
     private fun runSinglePermission(){
         permissionHandler.runSinglePermission(android.Manifest.permission.CAMERA){
             Log.d(TAG, "runMultiplePermission: Permission allowed")
+            Toast.makeText(this, "Camera Permission allowed", Toast.LENGTH_LONG).show()
         }
     }
 }
