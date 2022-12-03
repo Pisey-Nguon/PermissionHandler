@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
 }
 
 android {
@@ -32,4 +33,17 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
+}
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.digitaltalent.permissionhandler'
+                artifactId = 'permissionhandler'
+                version = '1.0'
+            }
+        }
+    }
 }
