@@ -8,15 +8,14 @@
     android:gravity="center"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/btnRequestMultiplePermission"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Request Location Permission" />
-    <Button
-        android:id="@+id/btnRequestSinglePermission"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Request Camera Permission" />
-
+    <FrameLayout
+        android:id="@+id/myFrame"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/myNav"
+        app:menu="@menu/nav_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </androidx.appcompat.widget.LinearLayoutCompat>
