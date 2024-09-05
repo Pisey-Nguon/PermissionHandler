@@ -1,17 +1,20 @@
 package com.digitaltalent.permissionhandlerexample.fragment
 
+import android.Manifest
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
-import com.digitaltalent.permissionhandler.PermissionFragmentHandler
-import com.digitaltalent.permissionhandler.PermissionHandler
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.widget.ImageViewCompat
+import androidx.fragment.app.Fragment
+import com.digitaltalent.permissionhandler.requestTakePhoto
+import com.digitaltalent.permissionhandler.runWithPermissions
 import com.digitaltalent.permissionhandlerexample.R
-import com.digitaltalent.permissionhandlerexample.TAG
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,10 +27,9 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private var param1: String? = null
     private var param2: String? = null
-    private var permissionHandler = PermissionFragmentHandler(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,15 +51,17 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val btnRequestCamera = view.findViewById<Button>(R.id.btnRequestCamera)
         btnRequestCamera.setOnClickListener {
-          runSinglePermission()
+            runSinglePermission()
         }
     }
-    private fun runSinglePermission(){
-        permissionHandler.runSinglePermission(android.Manifest.permission.CAMERA){
-            Log.d(TAG, "runMultiplePermission: Permission allowed")
-            Toast.makeText(requireContext(), "Camera Permission allowed", Toast.LENGTH_LONG).show()
+
+    private fun runSinglePermission() {
+        requestTakePhoto {
+            view?.findViewById<AppCompatImageView>(R.id.imageCamera)?.setImageURI(Uri.parse(it))
         }
+
     }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
