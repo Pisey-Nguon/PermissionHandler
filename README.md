@@ -24,23 +24,13 @@ allprojects {
 ```
 Note: TAG is a version of the package so please change it based here [![](https://jitpack.io/v/Pisey-Nguon/PermissionHandler.svg)](https://jitpack.io/#Pisey-Nguon/PermissionHandler)
 
-**Step 3.** Implementation
+**Step 3.** Implementation example
 ```css
-    private var permissionHandler = PermissionHandler(this)
-         permissionHandler.runMultiplePermission(
-            android.Manifest.permission.ACCESS_FINE_LOCATION,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION,
-        ){
-            Log.d(TAG, "runMultiplePermission: Permissions allowed")
-            Toast.makeText(this, "Location Permission allowed", Toast.LENGTH_LONG).show()
-        }
-	
-	permissionHandler.runSinglePermission(android.Manifest.permission.CAMERA){
-            Log.d(TAG, "runMultiplePermission: Permission allowed")
-            Toast.makeText(this, "Camera Permission allowed", Toast.LENGTH_LONG).show()
+        requestTakePhoto {
+            view?.findViewById<AppCompatImageView>(R.id.imageCamera)?.setImageURI(Uri.parse(it))
         }
 ```
-
+Note: Don't forget to put permissions on manifest
 ## UML diagrams
 
 This is a behavior of PermissionHandler
