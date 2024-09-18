@@ -29,8 +29,11 @@ Note: TAG is a version of the package so please change it based here [![](https:
         requestTakePhoto {
             view?.findViewById<AppCompatImageView>(R.id.imageCamera)?.setImageURI(Uri.parse(it))
         }
+        currentLocation { location ->
+            view.findViewById<TextView>(R.id.txtCurrentLocation).text = location.toString()
+        }
 ```
-Note: Don't forget to put permissions on manifest
+Note: Don't forget to put permissions on manifest and add file_paths.xml if using with function take photo
 ## UML diagrams
 
 This is a behavior of PermissionHandler
