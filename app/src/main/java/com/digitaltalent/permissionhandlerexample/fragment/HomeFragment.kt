@@ -8,10 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
+import com.digitaltalent.permissionhandler.currentLocation
 import com.digitaltalent.permissionhandler.requestTakePhoto
 import com.digitaltalent.permissionhandler.runWithPermissions
 import com.digitaltalent.permissionhandlerexample.R
@@ -50,17 +52,19 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val btnRequestCamera = view.findViewById<Button>(R.id.btnRequestCamera)
+        val btnRequestCurrentLocation = view.findViewById<Button>(R.id.btnRequestCurrentLocation)
         btnRequestCamera.setOnClickListener {
-            runSinglePermission()
+            requestTakePhoto {
+                view.findViewById<AppCompatImageView>(R.id.imageCamera)?.setImageURI(Uri.parse(it))
+            }
+        }
+        btnRequestCurrentLocation.setOnClickListener {
+            currentLocation { location ->
+                view.findViewById<TextView>(R.id.txtCurrentLocation).text = location.toString()
+            }
         }
     }
 
-    private fun runSinglePermission() {
-        requestTakePhoto {
-            view?.findViewById<AppCompatImageView>(R.id.imageCamera)?.setImageURI(Uri.parse(it))
-        }
-
-    }
 
     companion object {
         /**
