@@ -62,17 +62,14 @@ class MediaHandler(private val fragment: Fragment) {
             }
         }
 
-    @Suppress("DEPRECATION")
     @SuppressLint("SimpleDateFormat")
     fun copyImageToAppDir(context: Context, uri: Uri): File {
-        val bitmap = when {
-            Build.VERSION.SDK_INT < 28 -> MediaStore.Images.Media.getBitmap(
-                context.contentResolver,
-                uri
-            )
-
-            else -> ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
-
+        // Use ImageDecoder for API 28+ as getBitmap is deprecated
+        val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
+        } else {
+            @Suppress("DEPRECATION")
+            MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
         }
 
         // Compress the image

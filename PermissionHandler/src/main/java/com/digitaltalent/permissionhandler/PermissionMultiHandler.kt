@@ -2,7 +2,6 @@ package com.digitaltalent.permissionhandler
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager.GET_META_DATA
 import android.net.Uri
 import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,7 +27,7 @@ class PermissionMultiHandler(private val fragment: Fragment, private val forceGr
     private val requestMultiplePermissionNoCallbackLauncher =
         fragment.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { maps ->
             val permissionDenied = maps.filter { !it.value }.map {
-                val info = context.packageManager.getPermissionInfo(it.key, GET_META_DATA)
+                val info = context.packageManager.getPermissionInfo(it.key, 0)
                 val label = context.getString(info.labelRes)
                 label
             }
@@ -93,7 +92,7 @@ class PermissionMultiHandler(private val fragment: Fragment, private val forceGr
     private fun showDialogRequestPermission(permissions: ArrayList<String>) {
         if (permissions.isEmpty()) return
         val permissionDenied = permissions.filter { !context.hasSelfPermission(permissions) }.map {
-            val info = context.packageManager.getPermissionInfo(it, GET_META_DATA)
+            val info = context.packageManager.getPermissionInfo(it, 0)
             val label = context.getString(info.labelRes)
             label
         }

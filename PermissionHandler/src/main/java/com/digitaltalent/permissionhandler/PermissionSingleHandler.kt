@@ -2,7 +2,6 @@ package com.digitaltalent.permissionhandler
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager.GET_META_DATA
 import android.net.Uri
 import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContracts
@@ -31,7 +30,7 @@ class PermissionSingleHandler(private val fragment: Fragment, private val forceG
 
     private val requestSinglePermissionNoCallbackLauncher =
         fragment.registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            val info = context.packageManager.getPermissionInfo(permission!!, GET_META_DATA)
+            val info = context.packageManager.getPermissionInfo(permission!!, 0)
             val label = context.getString(info.labelRes)
             when {
                 isGranted -> {
@@ -92,7 +91,7 @@ class PermissionSingleHandler(private val fragment: Fragment, private val forceG
 
     private fun showDialogRequestPermission(permission: String?) {
         if (permission == null) return
-        val info = context.packageManager.getPermissionInfo(permission, GET_META_DATA)
+        val info = context.packageManager.getPermissionInfo(permission, 0)
         val label = context.getString(info.labelRes)
 
         val fullDescription = StringBuilder()
