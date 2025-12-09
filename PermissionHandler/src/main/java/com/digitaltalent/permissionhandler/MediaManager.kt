@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentActivity
 
 fun FragmentActivity.requestTakePhotoOrGallery(callback: (path: String) -> Unit) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-        // Android 14+ (API 34+) supports partial access with READ_MEDIA_VISUAL_USER_SELECTED
+        // Android 14 (API 34) supports partial access with READ_MEDIA_VISUAL_USER_SELECTED
         runWithPermissions(
             Manifest.permission.CAMERA,
             Manifest.permission.READ_MEDIA_IMAGES,
@@ -30,7 +30,7 @@ fun FragmentActivity.requestTakePhotoOrGallery(callback: (path: String) -> Unit)
 
 fun Fragment.requestTakePhotoOrGallery(callback: (path: String) -> Unit) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-        // Android 14+ (API 34+) supports partial access with READ_MEDIA_VISUAL_USER_SELECTED
+        // Android 14 (API 34) supports partial access with READ_MEDIA_VISUAL_USER_SELECTED
         runWithPermissions(
             Manifest.permission.CAMERA,
             Manifest.permission.READ_MEDIA_IMAGES,
@@ -75,7 +75,7 @@ fun Fragment.requestTakePhoto(callback: (path: String) -> Unit) {
 
 fun FragmentActivity.requestPickupImageGallery(callback: (path: String) -> Unit) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-        // Android 14+ (API 34+) supports partial access with READ_MEDIA_VISUAL_USER_SELECTED
+        // Android 14 (API 34) supports partial access with READ_MEDIA_VISUAL_USER_SELECTED
         runWithPermissions(
             Manifest.permission.READ_MEDIA_IMAGES,
             Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
@@ -97,7 +97,7 @@ fun FragmentActivity.requestPickupImageGallery(callback: (path: String) -> Unit)
 
 fun Fragment.requestPickupImageGallery(callback: (path: String) -> Unit) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-        // Android 14+ (API 34+) supports partial access with READ_MEDIA_VISUAL_USER_SELECTED
+        // Android 14 (API 34) supports partial access with READ_MEDIA_VISUAL_USER_SELECTED
         runWithPermissions(
             Manifest.permission.READ_MEDIA_IMAGES,
             Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED,
